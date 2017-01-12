@@ -124,6 +124,14 @@ module.exports = function(parser) {
             expect(data).to.match(/^[0-9]$/);
          });
         });
+
+        it('should encode a string message with lone surrogates replaced by U+FFFD', function(done) {
+          var data = '\uDC00\uD834\uDF06\uDC00 \uD800\uD835\uDF07\uD800';
+          encode({ type: 'message', data: data }, null, true, function(encoded) {
+            expect(decode(encoded, null, true)).to.eql({ type: 'message', data: '\uFFFD\uD834\uDF06\uFFFD \uFFFD\uD835\uDF07\uFFFD' });
+            done();
+          });
+        });
       });
 
       describe('decoding error handing', function () {
@@ -193,6 +201,12 @@ module.exports = function(parser) {
               });
           });
         });
+
+        it('should not utf8 encode when dealing with strings only', function() {
+          encPayload([{ type: 'message', data: '€€€' }, { type: 'message', data: 'α' }], function(data) {
+            expect(data).to.eql('4:4€€€2:4α');
+          });
+        });
       });
 
       describe('decoding error handling', function () {
@@ -255,13 +269,6 @@ module.exports = function(parser) {
           });
         });
 
-        it('should err on invalid utf8', function () {
-          decPayload('2:4\uffff', function (packet, index, total) {
-            var isLast = index + 1 == total;
-            expect(packet).to.eql(err);
-            expect(isLast).to.eql(true);
-          });
-        });
       });
     });
   });
