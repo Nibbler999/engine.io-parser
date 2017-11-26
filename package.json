@@ -2,7 +2,7 @@
   "name": "engine.io-parser",
   "description": "Parser for the client for the realtime Engine",
   "license": "MIT",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "homepage": "https://github.com/Nibbler999/engine.io-parser",
   "devDependencies": {
     "arraybuffer.slice": "0.0.6",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "after": "0.8.2",
-    "has-binary": "Nibbler999/has-binary"
+    "has-binary2": "~1.0.2"
   },
   "scripts": {
     "test": "make test"
